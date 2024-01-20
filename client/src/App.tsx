@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import Menu  from './components/Navbar'
+import Food from './components/Food'
 import Weights from './components/Weights'
 import ErrorPage from "./error-page";
 
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: "weights",
     element: <Weights></Weights>
+  },
+  {
+    path: "food",
+    element: <Food></Food>
   }
 ]);
 

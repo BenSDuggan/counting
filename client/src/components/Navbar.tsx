@@ -15,6 +15,7 @@ function Menu(props:any) {
         <Navbar.Collapse id="menu-navbar-nav">
           <Nav className="me-auto">
           <Nav.Link href="/weights">Weights</Nav.Link>
+          <Nav.Link href="/food">Food</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </>

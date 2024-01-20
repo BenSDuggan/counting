@@ -76,7 +76,7 @@ export const put_food_api = (req: Request, res: Response) => {
         return
     }
     
-    food.update_food(req.body.wid, req.body).then((result) => { 
+    food.update_food(req.body.fid, req.body).then((result) => { 
         if(result) 
             res.status(200).json({"successful":result, "data":""})
         else 
