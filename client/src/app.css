@@ -1,0 +1,35 @@
+html, body {
+    margin:0px;
+    height:100%;
+}
+  
+.main_nav {
+    padding-left: 20px;
+}
+
+.fill_grid {
+  height: 100%;
+}
+
+#call-page {
+  background-color: red;
+  height: calc(100vh - 60px); 
+}
+
+#sidebar-call {
+  background-color: blue;
+  display: inline-block;
+  overflow-y:auto;
+}
+
+#main-call {
+  background-color: green;
+  height: 100%;
+  display: inline-block;
+}
+
+#root {
+    height: 100%;
+}
+
+

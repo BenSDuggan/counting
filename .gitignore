@@ -1,0 +1,18 @@
+# Project
+data
+logs.log
+
+# Python stuff
+.pytest_cache
+__pycache__
+*.pyc
+
+# Node
+build
+node_modules
+package-lock.json
+
+# Dev env stuff
+.python-version
+.vscode
+.DS_Store
