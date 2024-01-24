@@ -8,6 +8,7 @@ import { settings } from './common/settings'
 
 import * as weight_api from './routes/weight_api'
 import * as food_api from './routes/food_api'
+import * as day_api from './routes/day_api'
 
 export const app:Application = express();
 
@@ -43,6 +44,12 @@ app.post(API_BASE_URL+'/food/', food_api.post_food_api);
 app.put(API_BASE_URL+'/food/', food_api.put_food_api);
 app.delete(API_BASE_URL+'/food/:id', food_api.delete_food_api);
 
+// Meal API
+app.get(API_BASE_URL+'/day/:id/', day_api.get_day_id_api);
+app.get(API_BASE_URL+'/day/', day_api.get_day_api);
+app.post(API_BASE_URL+'/day/', day_api.post_day_api);
+app.put(API_BASE_URL+'/day/', day_api.put_day_api);
+app.delete(API_BASE_URL+'/day/:id', day_api.delete_day_api);
 
 app.listen(PORT, (): void => {
     logger.info('Server started on port: ' + PORT);

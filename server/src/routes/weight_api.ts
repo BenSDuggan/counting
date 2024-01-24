@@ -14,12 +14,12 @@ const NUMBER_RESULTS:number = 10;
  */
 export const get_weight_api = (req: Request, res: Response) => {
     let page:number = Number(req.query.page) ?? 0;
-    //let max_date:string = new Date(Number(req.query.max_date ?? epoch())).toISOString();
-    //let min_date:string = new Date(Number(req.query.min_date ?? epoch()-(7*24*60*60*1000))).toISOString();
+    let max_date:string = new Date(Number(req.query.max_date ?? epoch())).toISOString();
+    let min_date:string = new Date(Number(req.query.min_date ?? (1))).toISOString();
 
     let term = {};
     // Filter by date
-    //term = {$and:[{"timestamp": {$gte:min_date}}, {"timestamp":{$lte:max_date}}]};
+    term = {$and:[{"timestamp": {$gte:min_date}}, {"timestamp":{$lte:max_date}}]};
 
     weight.get_weight(term, NUMBER_RESULTS, page).then((result) => {
         res.status(200).json({"successful":true, "data":result});

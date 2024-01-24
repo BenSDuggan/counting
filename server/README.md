@@ -18,6 +18,15 @@
 └── web.ts           				# Sets up web server and API
 ```
 
+## Components
+
+* `Weights`
+* `Days`: calories in and out for a given day
+* `Meal`: The `Food`s and `Product`s consumed for a given meal
+    * Types: `Breakfast`, `Lunch`, `Dinner`, `Snack`, `Desert`
+* `Food`: Manually entered foods
+* `Products`: Copy of the [OpenFoodFacts](https://world.openfoodfacts.org/) database
+
 ## Food information needed
 
 * Name (`product_name`)
@@ -28,5 +37,9 @@
 * Fat (`fat_value`)
 * Protein (`proteins_value`)
 * Photo
+
+## ToDo
+
+[ ] Serving
 
 
