@@ -10,6 +10,7 @@ const colors = {"calories":"#93C0A4", "fat":"#FFED66", "carbs":"#83C9F4", "prote
 
 interface ComplexGuageProps {
     value: number,
+    label: (v:number)=>string,
     color: (v:number)=>string,
     max?: number
 }
@@ -18,14 +19,14 @@ interface SimpleGuageProps {
     value: number
 }
 
-const Gauge = ({ value, color, max=100 }: ComplexGuageProps) => {
+const Gauge = ({ value, label, color, max=100 }: ComplexGuageProps) => {
   const gaugeEl = useRef<HTMLDivElement>(null)
   const gaugeRef = useRef<GaugeInstance | null>(null)
 
   useEffect(() => {
     if (!gaugeRef.current) {
       if (!gaugeEl.current) return
-      const options: GaugeOptions = { color: color, max:max }
+      const options: GaugeOptions = { color: color, max:max, label:label }
       gaugeRef.current = SvgGauge(gaugeEl.current, options)
       gaugeRef.current?.setValue(1)
     }
@@ -43,6 +44,7 @@ export const CaloriesGauge = ({ value }: SimpleGuageProps) => {
     return (
       <Gauge 
         value={value} 
+        label={(v:number) => v.toString() + "/" + settings.daily_calories.toString()}
         color={(v:number) => colors["calories"]}
         max={settings.daily_calories} />
     )
@@ -53,6 +55,7 @@ export const FatGauge = ({ value }: SimpleGuageProps) => {
       <Gauge 
         value={value} 
         color={(v:number) => colors["fat"]}
+        label={(v:number) => v.toString() + "/" + settings.daily_fat.toString()}
         max={settings.daily_fat} />
     )
 }
@@ -61,6 +64,7 @@ export const CarbGauge = ({ value }: SimpleGuageProps) => {
     return (
         <Gauge 
         value={value} 
+        label={(v:number) => v.toString() + "/" + settings.daily_carbs.toString()}
         color={(v:number) => colors["carbs"]}
         max={settings.daily_carbs} />
     )
@@ -70,6 +74,7 @@ export const ProteinGauge = ({ value }: SimpleGuageProps) => {
     return (
         <Gauge 
         value={value} 
+        label={(v:number) => v.toString() + "/" + settings.daily_protein.toString()}
         color={(v:number) => colors["protein"]}
         max={settings.daily_protein} />
     )

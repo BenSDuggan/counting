@@ -19,6 +19,17 @@ interface IProps {
 }
 
 const MealItems = (props:IProps) => {
+    let chunks:Food_Type[][] = [];
+    for(let i=0; i<props.meal.items.length; i+=3) {
+        chunks.push(props.meal.items.slice(i, i + 3));
+    }
+
+    let set_food_items = (foods:Food_Type[]) => {
+        let m:Meal_Type = {...props.meal};
+        m.items = foods;
+
+        props.updateMeal(m, true);
+    }
 
     let delete_food_item = (fid:string) => {
         let m:Meal_Type = {...props.meal};
@@ -29,16 +40,22 @@ const MealItems = (props:IProps) => {
 
     return (
         <Container>
-                <Row>
-                    <Col><h3>Breakfast</h3></Col> 
-                    <Col><IntakeModal meal={props.meal} /></Col>
-                </Row>
-                {props.meal.items.map((f:Food_Type) => 
-                    <MealItem 
-                        key={f.fid} 
+            <h3>Breakfast </h3>
+            <IntakeModal 
+                    meal={props.meal}
+                    saveItems={set_food_items} />
+                
+            {chunks.map((chunk:Food_Type[], index:number) =>
+            <Row key={props.meal.type+index}>
+                {chunk.map((f:Food_Type) => 
+                <Col md={4}>
+                    <MealItem
+                        key={f.fid}
                         food={f}
-                        deleteFood={delete_food_item} />)}
-            </Container>
+                        deleteFood={delete_food_item} />
+                </Col>)}
+            </Row>)}
+        </Container>
     )
 }
 

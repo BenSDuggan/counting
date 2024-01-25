@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import { v4 as uuidv4 } from 'uuid';
 
+import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -14,16 +15,27 @@ import { type Food as Food_Type } from '../types/Food';
 import { Meal as Meal_Type } from '../types/Day'
 
 interface IProps {
-    meal:Meal_Type
+    meal:Meal_Type,
+    saveItems:(foods:Food_Type[])=>void
 }
 
 const IntakeModal = (props:IProps) => {
-    const [foods, setFoods] = useState([]);
-    const [checked, setChecked] = useState<string[]>([]);
+    console.log(props.meal.items)
+    const [foods, setFoods] = useState<Food_Type[]>([]);
+    const [checked, setChecked] = useState<Food_Type[]>([...props.meal.items]);
+    const [unchecked, setUnchecked] = useState<Food_Type[]>([]);
     const [show, setShow] = useState(false);
     const [option, setOption] = useState({
         "page":0, 
         "submit":true})
+
+    let change_quantity = (food:Food_Type, value:number) => {
+        setChecked(prevChecked => (
+            prevChecked.map(item => 
+              item.fid === food.fid ? { ...item, quantity: value } : item
+            )
+        ))
+    }
 
     async function get_foods(ignore:boolean) {
         if(!option.submit)
@@ -44,26 +56,12 @@ const IntakeModal = (props:IProps) => {
         .then((record) => {
             if(!ignore) {
                 console.log(record)
-
-                if(option.page === 0) {
-                    setFoods(record.data);
-                }
-                else {
-                    let t = JSON.parse(JSON.stringify(foods));
-                    t.push(...record.data)
-                    setFoods(t);
-                }
+                
+                setFoods([...foods, record.data]);
+                setUnchecked([...unchecked, ...record.data]);
             }
         })
         .catch((error) => console.error(error));
-    }
-
-    let save_meal = () => {
-        foods.filter((food:Food_Type) =>
-            checked.includes(food.fid)
-        ).map((food:Food_Type) =>
-            props.meal.items.push(food)
-        );
     }
 
     useEffect(() => {
@@ -78,7 +76,7 @@ const IntakeModal = (props:IProps) => {
     return (
         <>
             <Button variant="primary" onClick={() => setShow(true)}>
-                Add meal
+                Edit
             </Button>
 
             <Modal show={show} onHide={() => setShow(false)}>
@@ -86,36 +84,40 @@ const IntakeModal = (props:IProps) => {
                 <Modal.Title>Add New Food</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <h3>Selected</h3>
                 <Container className="table-responsive">
                 <Table>
                 <thead>
                     <tr>
                         <th></th>
                         <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Servings</th>
                         <th>Calories</th>
                         <th>Macros (F C P)</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {foods.filter((food:Food_Type) => checked.includes(food.fid))
-                        .map((food:Food_Type) => 
+                    {checked.map((food:Food_Type) => 
                         <tr key={food.fid+"checked"}>
                             <td>
                                 <input 
                                     type="checkbox" 
                                     name="vehicle1"
-                                    checked={checked.includes(food.fid)}
+                                    checked={true}
                                     onChange={(e) => {
-                                        if(checked.includes(food.fid))
-                                            setChecked(checked.filter(c => food.fid !== c))
-                                        else
-                                            setChecked([...checked, food.fid])
-                                    }}  />
+                                        setChecked(checked.filter(c => food.fid !== c.fid));
+                                        setUnchecked([...unchecked, food])
+                                    }} />
                             </td>
                             <td>{food.name}</td>
-                            <td>{food.calories + " kcal"}</td>
-                            <td>{food.fat + " g; " + food.carbs + " g; " + food.protein + " g"}</td>
+                            <td>{<Form.Control
+                                type="number" 
+                                placeholder="Weight"
+                                value={food.quantity}
+                                onChange={(e) => change_quantity(food, Number(e.target.value))}  />}</td>
+                            <td>{food.serving}</td>
+                            <td>{food.calories * food.quantity + " kcal"}</td>
+                            <td>{food.fat*food.quantity + " g; " + food.carbs*food.quantity + " g; " + food.protein*food.quantity + " g"}</td>
                         </tr>)}
                 </tbody>
                 </Table>
@@ -133,18 +135,16 @@ const IntakeModal = (props:IProps) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {foods.map((food:Food_Type) => 
+                    {unchecked.map((food:Food_Type) =>
                         <tr key={food.fid+"search"}>
                             <td>
                                 <input 
                                     type="checkbox" 
                                     name="vehicle1"
-                                    checked={checked.includes(food.fid)}
+                                    checked={false}
                                     onChange={(e) => {
-                                        if(checked.includes(food.fid))
-                                            setChecked(checked.filter(c => food.fid !== c))
-                                        else
-                                            setChecked([...checked, food.fid])
+                                        setChecked([...checked, food])
+                                        setUnchecked(unchecked.filter(c => food.fid !== c.fid));
                                     }}  />
                             </td>
                             <td>{food.name}</td>
@@ -162,7 +162,7 @@ const IntakeModal = (props:IProps) => {
                 </Button>
                 <Button variant="primary" onClick={(e) => {
                                 e.preventDefault(); 
-                                save_meal();}}>
+                                props.saveItems(checked);}}>
                     Save
                 </Button>
             </Modal.Footer>

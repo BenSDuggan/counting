@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
 
+import Guage, { CaloriesGauge, FatGauge, CarbGauge, ProteinGauge } from './Guage'
 import MealItems from './MealItems'
 import { type Food as Food_Type } from '../types/Food';
 import { new_day, Day as Day_Type, Meal as Meal_Type } from '../types/Day'
@@ -79,10 +80,19 @@ const Day = ({}) => {
 
     return (
         <Container className="main" fluid="lg">
-            <h2>{new Date(day.timestamp ?? 1).toDateString()}</h2>
-            <Container>
-                Calories {day.calories}; Fat {day.fat}; Carbs {day.carbs}; Protein {day.protein}
-            </Container>
+            <Row>
+                <Col md={3}><h2>{new Date(day.timestamp ?? 1).toDateString()}</h2></Col>
+                <Col md={6}>
+                <Container>
+                        <Row>
+                            <Col><CaloriesGauge value={day.calories} /></Col>
+                            <Col><FatGauge value={day.fat} /></Col>
+                            <Col><CarbGauge value={day.carbs} /></Col>
+                            <Col><ProteinGauge value={day.protein} /></Col>
+                        </Row>
+                    </Container>
+                </Col>
+            </Row>
             <MealItems meal={day.breakfast} updateMeal={update_meal_items} />
             
         </Container>
@@ -91,3 +101,13 @@ const Day = ({}) => {
 
 export default Day;
 //<MealItems meal={day.breakfast} />
+/*
+<Container>
+                        <Row>
+                            <Col md={3}><CaloriesGauge value={day.calories} /></Col>
+                            <Col md={3}><FatGauge value={day.fat} /></Col>
+                            <Col md={3}><CarbGauge value={day.carbs} /></Col>
+                            <Col md={3}><ProteinGauge value={day.protein} /></Col>
+                        </Row>
+                    </Container>
+                    */

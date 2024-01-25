@@ -7,7 +7,6 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
-import Guage, { CaloriesGauge, FatGauge, CarbGauge, ProteinGauge } from './Guage'
 import { type Food as Food_Type } from '../types/Food';
 
 interface IProps {
@@ -21,24 +20,12 @@ const MealItem = (props:IProps) => {
             <Card>
                 <Card.Body>
                     <Card.Title>{props.food.name}</Card.Title>
-                    <Card.Subtitle>{props.food.serving} x {props.food.quantity}</Card.Subtitle>
-                    <Container>
-                        <Row>
-                            <Col md={3}><CaloriesGauge value={props.food.calories} /></Col>
-                            <Col md={3}><FatGauge value={props.food.fat} /></Col>
-                            <Col md={3}><CarbGauge value={props.food.carbs} /></Col>
-                            <Col md={3}><ProteinGauge value={props.food.protein} /></Col>
-                        </Row>
-                    </Container>
-                    <Card.Text>
-                        
-                    </Card.Text>
-                    <Card.Link href="#">Edit food</Card.Link>
-                    <Button variant="primary" onClick={(e) => {
-                                e.preventDefault(); 
-                                props.deleteFood(props.food.fid);}}>
-                        Delete
-                    </Button>
+                    <Card.Subtitle>{props.food.serving} x {props.food.quantity} | Calories: {props.food.calories*props.food.quantity} kcal</Card.Subtitle>
+                    <div>
+                        <span>Fat: {props.food.fat*props.food.quantity} g | </span>
+                        <span>Carbs: {props.food.carbs*props.food.quantity} g | </span>
+                        <span>Protein: {props.food.protein*props.food.quantity} g</span>
+                    </div>
                 </Card.Body>
             </Card>
     )
