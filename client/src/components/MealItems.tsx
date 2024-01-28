@@ -40,7 +40,7 @@ const MealItems = (props:IProps) => {
 
     return (
         <Container>
-            <h3>Breakfast </h3>
+            <h3>{props.meal.type.toLocaleUpperCase()}</h3>
             <IntakeModal 
                     meal={props.meal}
                     saveItems={set_food_items} />

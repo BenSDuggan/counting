@@ -15,7 +15,7 @@ interface ComplexGuageProps {
     max?: number
 }
 
-interface SimpleGuageProps {
+interface SimpleGaugeProps {
     value: number
 }
 
@@ -30,7 +30,7 @@ const Gauge = ({ value, label, color, max=100 }: ComplexGuageProps) => {
       gaugeRef.current = SvgGauge(gaugeEl.current, options)
       gaugeRef.current?.setValue(1)
     }
-    gaugeRef.current?.setValueAnimated(value, 1)
+    gaugeRef.current?.setValueAnimated(value, 0)
   }, [value])
 
   return (
@@ -40,7 +40,7 @@ const Gauge = ({ value, label, color, max=100 }: ComplexGuageProps) => {
   )
 }
 
-export const CaloriesGauge = ({ value }: SimpleGuageProps) => {
+export const CaloriesGauge = ({ value }: SimpleGaugeProps) => {
     return (
       <Gauge 
         value={value} 
@@ -50,7 +50,7 @@ export const CaloriesGauge = ({ value }: SimpleGuageProps) => {
     )
 }
 
-export const FatGauge = ({ value }: SimpleGuageProps) => {
+export const FatGauge = ({ value }: SimpleGaugeProps) => {
     return (
       <Gauge 
         value={value} 
@@ -60,17 +60,17 @@ export const FatGauge = ({ value }: SimpleGuageProps) => {
     )
 }
 
-export const CarbGauge = ({ value }: SimpleGuageProps) => {
+export const CarbGauge = ({ value }: SimpleGaugeProps) => {
     return (
         <Gauge 
         value={value} 
         label={(v:number) => v.toString() + "/" + settings.daily_carbs.toString()}
         color={(v:number) => colors["carbs"]}
-        max={settings.daily_carbs} />
+        max={Math.max(settings.daily_carbs, value)} />
     )
 }
 
-export const ProteinGauge = ({ value }: SimpleGuageProps) => {
+export const ProteinGauge = ({ value }: SimpleGaugeProps) => {
     return (
         <Gauge 
         value={value} 

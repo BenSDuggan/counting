@@ -11,7 +11,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
 
-import { type Food as Food_Type } from '../types/Food';
+import { Food, type Food as Food_Type } from '../types/Food';
 import { Meal as Meal_Type } from '../types/Day'
 
 interface IProps {
@@ -20,14 +20,32 @@ interface IProps {
 }
 
 const IntakeModal = (props:IProps) => {
-    console.log(props.meal.items)
     const [foods, setFoods] = useState<Food_Type[]>([]);
-    const [checked, setChecked] = useState<Food_Type[]>([...props.meal.items]);
+    const [checked, setChecked] = useState<Food_Type[]>([]);
     const [unchecked, setUnchecked] = useState<Food_Type[]>([]);
     const [show, setShow] = useState(false);
     const [option, setOption] = useState({
         "page":0, 
         "submit":true})
+
+    let remove_checked_foods = (food:Food_Type[]):Food_Type[] => {
+        let fids:string[] = checked.map((f:Food_Type) => f.fid);
+        let no_dups:Food_Type[] = [];
+
+        for(let f in food) {
+            if(!fids.includes(food[f]["fid"])) {
+                no_dups.push(food[f]);
+                fids.push(f);
+            }
+        }
+
+        return no_dups;
+    }
+
+    let reset_states = () => {
+        setChecked([...props.meal.items])
+        setUnchecked([...foods]);
+    }
 
     let change_quantity = (food:Food_Type, value:number) => {
         setChecked(prevChecked => (
@@ -57,8 +75,8 @@ const IntakeModal = (props:IProps) => {
             if(!ignore) {
                 console.log(record)
                 
-                setFoods([...foods, record.data]);
-                setUnchecked([...unchecked, ...record.data]);
+                setFoods([...foods, ...record.data]);
+                setUnchecked(remove_checked_foods([...unchecked, ...record.data]));
             }
         })
         .catch((error) => console.error(error));
@@ -71,7 +89,10 @@ const IntakeModal = (props:IProps) => {
 
         return () => {ignore = true;}
       }, [option]);
-    
+
+    useEffect(() => {
+        setChecked([...checked, ...props.meal.items]);
+    }, [props.meal.items]);
 
     return (
         <>
@@ -79,7 +100,7 @@ const IntakeModal = (props:IProps) => {
                 Edit
             </Button>
 
-            <Modal show={show} onHide={() => setShow(false)}>
+            <Modal show={show} onHide={() => {reset_states(); setShow(false);}}>
             <Modal.Header closeButton>
                 <Modal.Title>Add New Food</Modal.Title>
             </Modal.Header>
@@ -135,7 +156,7 @@ const IntakeModal = (props:IProps) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {unchecked.map((food:Food_Type) =>
+                    {remove_checked_foods(unchecked).map((food:Food_Type) =>
                         <tr key={food.fid+"search"}>
                             <td>
                                 <input 
@@ -157,7 +178,7 @@ const IntakeModal = (props:IProps) => {
             </Container>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={() => setShow(false)}>
+                <Button variant="secondary" onClick={() => {reset_states(); setShow(false);}}>
                     Close
                 </Button>
                 <Button variant="primary" onClick={(e) => {

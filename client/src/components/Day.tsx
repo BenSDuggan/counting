@@ -12,6 +12,8 @@ import MealItems from './MealItems'
 import { type Food as Food_Type } from '../types/Food';
 import { new_day, Day as Day_Type, Meal as Meal_Type } from '../types/Day'
 
+const meal_types = ["breakfast", "lunch", "dinner", "snack", "dessert"];
+
 const Day = ({}) => {
     const [day, setDay] = useState(new_day() as Day_Type);
 
@@ -83,7 +85,7 @@ const Day = ({}) => {
             <Row>
                 <Col md={3}><h2>{new Date(day.timestamp ?? 1).toDateString()}</h2></Col>
                 <Col md={6}>
-                <Container>
+                    <Container>
                         <Row>
                             <Col><CaloriesGauge value={day.calories} /></Col>
                             <Col><FatGauge value={day.fat} /></Col>
@@ -94,20 +96,13 @@ const Day = ({}) => {
                 </Col>
             </Row>
             <MealItems meal={day.breakfast} updateMeal={update_meal_items} />
+            <MealItems meal={day.lunch} updateMeal={update_meal_items} />
+            <MealItems meal={day.dinner} updateMeal={update_meal_items} />
+            <MealItems meal={day.snack} updateMeal={update_meal_items} />
+            <MealItems meal={day.dessert} updateMeal={update_meal_items} />
             
         </Container>
     )
 }
 
 export default Day;
-//<MealItems meal={day.breakfast} />
-/*
-<Container>
-                        <Row>
-                            <Col md={3}><CaloriesGauge value={day.calories} /></Col>
-                            <Col md={3}><FatGauge value={day.fat} /></Col>
-                            <Col md={3}><CarbGauge value={day.carbs} /></Col>
-                            <Col md={3}><ProteinGauge value={day.protein} /></Col>
-                        </Row>
-                    </Container>
-                    */

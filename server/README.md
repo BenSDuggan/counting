@@ -40,6 +40,8 @@
 
 ## ToDo
 
-[ ] Serving
+[x] Quantity
+[ ] Make calory/macro chart render when we go over
+[ ]
 
 
