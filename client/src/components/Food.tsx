@@ -8,10 +8,19 @@ import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
 
 import FoodNewModal from './FoodNewModal'
-import { type Food as Food_Type } from '../types/Food';
+import MealItemsAdd from "./MealItemsAdd";
+import MealItemsFood from "./MealItemsFood";
+import { type Food as Food_Type, new_food } from '../types/Food';
 
-const Food:React.FC<{}> = ({}) => {
-    const [foods, setFoods] = useState([]);
+interface IProps {
+    did?:string, // Day ID
+    type?:string // Meal Type
+}
+
+const Food = (props:IProps) => {
+    const [foods, setFoods] = useState<Food_Type[]>([]);
+    const [displayOnly, setDisplayOnly] = useState(true);
+    const [search, setSearch] = useState("");
     const [option, setOption] = useState({
         "page":0, 
         "submit":true})
@@ -49,9 +58,11 @@ const Food:React.FC<{}> = ({}) => {
         .catch((error) => console.error(error));
     }
 
-    async function delete_recording(id:string) {
-        fetch("api/food/"+id, { 
-            method: 'delete',
+    let search_foods = async () => {
+        let product_id:string = search;
+
+        fetch("https://world.openfoodfacts.org/api/v2/product/"+product_id+".json", {
+            method: 'get',
             headers: {'Content-Type': 'application/json'}
         })
         .then((response) => {
@@ -59,13 +70,37 @@ const Food:React.FC<{}> = ({}) => {
         })
         .then((record) => {
             console.log(record);
-            setOption({...option, page:0, submit:true});
-            get_foods(false);
+            if(record.status === 1) {
+                let food:Food_Type = new_food();
+
+                food.name = record["product"]["product_name"];
+                food.serving = record["product"]["serving_size"];
+                food.manual = false;
+                food.off_id = product_id;
+
+                food.calories = record["product"]["nutriments"]["energy-kcal"];
+                food.fat = record["product"]["nutriments"]["fat"];
+                food.carbs = record["product"]["nutriments"]["carbohydrates"];
+                food.protein = record["product"]["nutriments"]["proteins"];
+
+                console.log(food);
+                //setFoods([food]);
+            }
+            else {
+                alert("Product does not exist.")
+            }
         })
-        .catch((error) => console.error(error));
+        .catch((error) => {
+            alert("Could not fetch product.")
+            console.error(error);
+        });
     }
 
     useEffect(() => {
+        if(Object.keys(props).includes("did") && Object.keys(props).includes("type")) {
+            setDisplayOnly(false);
+        }
+
         let ignore = false;
 
         get_foods(ignore);
@@ -76,41 +111,30 @@ const Food:React.FC<{}> = ({}) => {
     return (
         <Container className="main" fluid="lg">
             <h2>Food</h2>
-            <Container className="table-responsive">
-                <Table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Calories</th>
-                        <th>Macros</th>
-                        <th>Description</th>
-                        <th>Date</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {foods.map((food:Food_Type) => 
-                        <tr key={food.fid}>
-                            <td>{food.name}</td>
-                            <td>{food.calories + " kcal"}</td>
-                            <td>{food.carbs + " g; " + food.protein + " g; " + food.fat + " g"}</td>
-                            <td>{food.description}</td>
-                            <td>{new Date(food.timestamp).toLocaleString()}</td>
-                            <td>
-                                <FoodNewModal food={food} />
-                                <Button 
-                                    variant="dark" 
-                                    onClick={ () => { delete_recording(food.fid) }}>
-                                    🗑️</Button>
-                            </td>
-                        </tr>)}
-                </tbody>
-                </Table>
-            </Container>
             <Row>
+                <Col md={4}>
+                    <input type="text" value={search} onChange={(e)=>setSearch(e.target.value)}></input>
+                    <Button onClick={(e) => {e.preventDefault(); search_foods();}}>Search</Button>
+                </Col>
                 <Col md={2}>
                     <FoodNewModal food={{}} />
                 </Col>
+            </Row>
+
+            <hr />
+
+            {displayOnly ? 
+                <MealItemsFood foods={foods}></MealItemsFood> :
+                <MealItemsAdd
+                        key={"mealItemsAdd-"+props.did+"-"+props.type}
+                        foods={foods}
+                        did={props.did as string}
+                        type={props.type as string}
+                    ></MealItemsAdd>
+            }
+            
+            <hr />
+            <Row>
                 <Col md={2}>
                     <Button variant="secondary" onClick={()=>setOption({...option, page:option.page + 1, submit:true})}>Load more</Button>
                 </Col>

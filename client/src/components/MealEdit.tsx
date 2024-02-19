@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Pagination from 'react-bootstrap/Pagination';
 
+import Food from './Food'
 import MealItems from './MealItems'
 import Products from './Products'
 
@@ -22,7 +23,7 @@ const MealEdit = () => {
     const [type, setType] = useState<"breakfast"|"lunch"|"dinner"|"snack"|"dessert">("breakfast");
     const [missing, setMissing] = useState(true);
 
-    const [tab, setTab] = useState("products");
+    const [tab, setTab] = useState("foods");
 
     async function get_day(ignore:boolean) {
         const currentDate = new Date();
@@ -107,6 +108,12 @@ const MealEdit = () => {
                         did={day.did}
                         type={type}
                     ></Products> : <></>}
+
+                {tab === 'foods' ? 
+                    <Food
+                        did={day.did}
+                        type={type}
+                    ></Food> : <></>}
                 
             </Container>
         </Container>

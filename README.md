@@ -26,7 +26,7 @@
 - [ ] Meal Picker
     - [x] View meals, change quantities, remove meal
     - [ ] View `Foods` and search for them
-    - [ ] View `Products` and search for them
+    - [x] View `Products` and search for them
     - [ ] Scan QR code and search `Products`
     - [ ] Load MealEdit from `did` in URL
     - [ ] Add `Products` images
