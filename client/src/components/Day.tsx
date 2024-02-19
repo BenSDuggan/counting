@@ -1,20 +1,17 @@
 
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 
-import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Table from 'react-bootstrap/Table';
 
-import Guage, { CaloriesGauge, FatGauge, CarbGauge, ProteinGauge } from './Guage'
-import MealItems from './MealItems'
-import { type Food as Food_Type } from '../types/Food';
-import { new_day, Day as Day_Type, Meal as Meal_Type } from '../types/Day'
+import { CaloriesGauge, FatGauge, CarbGauge, ProteinGauge } from './Guage'
+import MealItemsChange from './MealItemsChange'
+import { new_day, Day as Day_Type } from '../types/Day'
 
 const meal_types = ["breakfast", "lunch", "dinner", "snack", "dessert"];
 
-const Day = ({}) => {
+const Day = () => {
     const [day, setDay] = useState(new_day() as Day_Type);
 
     async function get_day(ignore:boolean) {
@@ -37,39 +34,13 @@ const Day = ({}) => {
             if(!ignore) {
                 console.log(record)
 
-                if(record.data.length == 1)
+                if(record.data.length === 1)
                     setDay(record.data[0]);
                 else
                     alert("Could not get the data for today.")
             }
         })
         .catch((error) => console.error(error));
-    }
-
-    let update_meal_items = async (meal:Meal_Type, reload:boolean):Promise<void> => {
-        // TODO: Update day with meals
-        let d:Day_Type = {...day};
-        d[meal.type] = meal;
-
-        fetch("/api/day/", { 
-            method: "put",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(d)
-        })
-        .then((response) => {
-            return response.json();
-        })
-        .then((record) => {
-            console.log(record);
-            if(record.successful)
-                window.location.reload();
-            else
-                alert("Could not update item")
-        })
-        .catch((error) => {
-            console.error(error);
-            alert(error);
-        });
     }
 
     useEffect(() => {
@@ -95,12 +66,20 @@ const Day = ({}) => {
                     </Container>
                 </Col>
             </Row>
-            <MealItems meal={day.breakfast} updateMeal={update_meal_items} />
-            <MealItems meal={day.lunch} updateMeal={update_meal_items} />
-            <MealItems meal={day.dinner} updateMeal={update_meal_items} />
-            <MealItems meal={day.snack} updateMeal={update_meal_items} />
-            <MealItems meal={day.dessert} updateMeal={update_meal_items} />
             
+            {meal_types.map(((type:string) => 
+                <Container key={"meal-"+type}>
+                    <hr />
+                    <div>
+                        <h3 style={{"display":"inline"}}>{type.toLocaleUpperCase()}</h3>
+                        <a href={"/mealedit?type="+type}>Edit</a>
+                    </div>
+
+                    <MealItemsChange 
+                        foods={day[type as "breakfast"|"lunch"|"dinner"|"snack"|"dessert"].items} 
+                        did={day.did} 
+                        type={type} />
+                </Container>))}
         </Container>
     )
 }

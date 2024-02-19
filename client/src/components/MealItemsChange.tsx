@@ -16,37 +16,12 @@ import { type Food as Food_Type } from '../types/Food';
 
 interface IProps {
     food:Food_Type,
-    new_card:boolean,
-    did?:string, // Day ID
-    type?:string // Meal Type
+    did:string, // Day ID
+    type:string // Meal Type
 }
 
-const MealItem = (props:IProps) => {
+export const MealItemChange = (props:IProps) => {
     const [quantity, setQuantity] = useState(1);
-    const [preview, setPreview] = useState(true);
-
-    let add_meal_item = () => {
-        fetch("/api/meal/"+props.did+"/"+props.type+"/", { 
-            method: "post",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(props.food)
-        })
-        .then((response) => {
-            return response.json();
-        })
-        .then((record) => {
-            console.log(record);
-            if(record.successful) {
-                window.location.reload();
-            }
-            else
-                alert("Meal not added");
-        })
-        .catch((error) => {
-            console.error(error);
-            alert(error);
-        });
-    }
 
     let edit_meal_item = () => {
         props.food.quantity = quantity;
@@ -97,11 +72,6 @@ const MealItem = (props:IProps) => {
 
     useEffect(() => {
         setQuantity(props.food.quantity);
-
-        const prop_keys:string[] = Object.keys(props);
-        if(prop_keys.includes("did") && prop_keys.includes("type")) {
-            setPreview(false);
-        }
     }, []);
 
 
@@ -123,18 +93,42 @@ const MealItem = (props:IProps) => {
                         <span>Protein: {props.food.protein*quantity} g</span>
                     </div>
                 </Card.Body>
-
-                {preview ? <></> : 
-                    <Card.Footer>
-                    {props.new_card  ? 
-                        <Card.Link onClick={(e) => {e.preventDefault(); add_meal_item();}}>Add</Card.Link> : 
-                        <>
-                            <Card.Link onClick={(e) => {e.preventDefault(); edit_meal_item();}}>Update</Card.Link>
-                            <Card.Link onClick={(e) => {e.preventDefault(); remove_meal_item();}}>Remove</Card.Link>
-                        </>}
-                    </Card.Footer>}
+                <Card.Footer>
+                    <Card.Link onClick={(e) => {e.preventDefault(); edit_meal_item();}}>Update</Card.Link>
+                    <Card.Link onClick={(e) => {e.preventDefault(); remove_meal_item();}}>Remove</Card.Link>
+                </Card.Footer>
             </Card>
     )
 }
 
-export default MealItem;
+
+interface IsProps {
+    foods:Food_Type[],
+    did:string, // Day ID
+    type:string // Meal Type
+}
+
+const MealItemsChange = (props:IsProps) => {
+    let chunks:Food_Type[][] = [];
+    for(let i=0; i<props.foods.length; i+=3) {
+        chunks.push(props.foods.slice(i, i + 3));
+    }
+
+    return (
+        <Container>
+            {chunks.map((chunk:Food_Type[], index:number) =>
+            <Row key={props.type+index}>
+                {chunk.map((f:Food_Type) => 
+                <Col key={"item-row_"+f.fid} md={4}>
+                    <MealItemChange
+                        key={f.fid}
+                        food={f}
+                        did={props.did}
+                        type={props.type} />
+                </Col>)}
+            </Row>)}
+        </Container>
+    )
+}
+
+export default MealItemsChange;

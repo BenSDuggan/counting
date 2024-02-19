@@ -3,7 +3,7 @@
 ## Install and Run
 
 * Originally set up using: <https://khalilstemmler.com/blogs/typescript/node-starter-project/>
-* Run dev: `npm run start:dev`
+* Run dev: `npm run start:dev
 
 
 ## Project structure

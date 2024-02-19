@@ -1,5 +1,4 @@
 
-//import React, { useState, useEffect } from "react";
 
 import {
   createBrowserRouter,
@@ -8,7 +7,9 @@ import {
 
 import Menu  from './components/Navbar'
 import Day from './components/Day'
+import MealEdit from './components/MealEdit'
 import Food from './components/Food'
+import Products from './components/Products'
 import Weights from './components/Weights'
 import ErrorPage from "./error-page";
 
@@ -32,10 +33,19 @@ const router = createBrowserRouter([
   {
     path: "food",
     element: <Food></Food>
+  },
+  {
+    path: "products",
+    element: <Products></Products>
+  },
+  {
+    path: "mealedit",
+    element: <MealEdit></MealEdit>
   }
 ]);
 
 export default function App() {
+
   return (
     <>
       <Menu></Menu>

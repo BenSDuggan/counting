@@ -13,7 +13,7 @@ const NUMBER_RESULTS:number = 10;
  * @route GET /api/day
  */
 export const get_day_api = (req: Request, res: Response) => {
-    let page:number = Number(req.query.page) ?? 0;
+    let page:number = Number(req.query.page ?? 0);
     let max_date:string = new Date(Number(req.query.max_date ?? epoch())).toISOString();
     let min_date:string = new Date(Number(req.query.min_date ?? (1))).toISOString();
     let required:boolean = Boolean(req.query.required) ?? false;
@@ -29,7 +29,7 @@ export const get_day_api = (req: Request, res: Response) => {
         else if(result.length > 1) {
             res.status(201).json({"successful":true, "data":result});
         }
-        else {
+        else if(result.length == 0 && required) {
             let d:day.Day = day.new_day();
             day.insert_day(d).then((result2) => {
                 if(result2)
@@ -39,6 +39,9 @@ export const get_day_api = (req: Request, res: Response) => {
                     res.status(500).json({"successful":false, "data":"could not insert new day"}).end();
                 }
             })
+        }
+        else {
+            res.status(500).json({"successful":false, "data":"Could not find record. Did you make `required`?"}).end();
         }
     }).catch((err) => {
         logger.error("day_api: could not fetch day from database. " + err.message);

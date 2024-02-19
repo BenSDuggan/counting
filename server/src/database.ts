@@ -16,7 +16,19 @@ import { settings } from "./common/settings"
 
 export const DATABASE_NAME:string = settings.db.name ?? "counting";
 
-const uri:string = "mongodb://localhost:27017/?maxPoolSize=20&w=majority";
+let uri:string = "";
+
+if(settings.db.user === undefined) {
+    uri = "mongodb://localhost:27017/?maxPoolSize=20&w=majority";
+}
+else {
+    uri = 'mongodb://' + 
+    settings.db.user + ':' +
+    settings.db.pass + '@' + 
+    settings.db.host + ':' + 
+    settings.db.port + '/' + 
+    settings.db.name + '?maxPoolSize=20&w=majority';
+}
 
 export const client:MongoClient = new MongoClient(uri); // Create a new MongoClient
 

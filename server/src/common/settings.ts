@@ -1,7 +1,6 @@
 
-export const settings = {
-    "port":4010,
-    "db":{
-        "name":"counting"
-    }
-}
+import { readFileSync } from 'fs'
+
+const SETTINGS_FILE_PATH = "../data/settings.json";
+
+export const settings = JSON.parse(readFileSync(SETTINGS_FILE_PATH, 'utf8'));

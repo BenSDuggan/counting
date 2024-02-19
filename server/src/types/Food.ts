@@ -31,6 +31,7 @@ export interface Food {
     "protein":number, //Protein in grams
     "photos":string[], // product photos
     "timestamp":string, //When was food was entered
+    "last_used":string, //Last time the food was used
     "off_id":string, //ID from OpenFoodFacts
     "misc":{} //Misc data to include
 }
@@ -49,6 +50,7 @@ export const new_food = ():Food => {
         "protein":0, //Protein in grams
         "photos":[], // product photos
         "timestamp":new Date().toISOString(), //When was food was entered
+        "last_used":new Date().toISOString(),
         "off_id":"", //ID from OpenFoodFacts
         "misc":{} //Misc data to include
     }
