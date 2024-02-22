@@ -30,7 +30,6 @@ const Recent = (props:IProps) => {
             setOption({...option, submit:false})
 
         let params = '?page=' + option.page;
-        console.log("api/food/recent"+params)
 
         fetch("api/food/recent"+params, { 
             method: 'get',

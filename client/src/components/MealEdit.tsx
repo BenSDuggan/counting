@@ -9,8 +9,8 @@ import Pagination from 'react-bootstrap/Pagination';
 
 import Recent from './Recent'
 import Food from './Food'
-import MealItems from './MealItems'
 import Products from './Products'
+import MealItemsChange from "./MealItemsChange";
 
 import { new_day, Day as Day_Type } from '../types/Day'
 
@@ -74,7 +74,12 @@ const MealEdit = () => {
 
     return (
         <Container>
-            {missing ? <></> : <MealItems meal={day[type]} did={day.did} />}
+            {missing ? 
+                <></> : 
+                <MealItemsChange 
+                    foods={day[type].items} 
+                    did={day.did}
+                    type={type} />}
             <hr />
 
             <Container className="main" fluid="lg">
