@@ -22,18 +22,22 @@
 - [ ] Products
     - [x] Search OpenFoodFacts database by barcode
     - [ ] Search OpenFoodFacts by product name
+    - [ ] Scan QR code and search `Products`
     - [ ] Use our DB for products
 - [ ] Meal Picker
     - [x] View meals, change quantities, remove meal
-    - [ ] View `Foods` and search for them
+    - [x] View `Foods`
     - [x] View `Products` and search for them
-    - [ ] Scan QR code and search `Products`
-    - [ ] Load MealEdit from `did` in URL
+    - [x] Show `Recent` `foods` and `products`
     - [ ] Add `Products` images
 - [ ] Settings
     - [ ] Create settings page
     - [ ] Start weight and end weight (saved and visible on graph)
     - [ ] Set calories and macros 
+- [ ] Deploy
 
+## Bugs
+
+- [ ] `food_api.get_food_api` and `food_api.get_food_recent_api` both return the previous item when `page >= 2`
 
 

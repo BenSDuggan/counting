@@ -76,6 +76,7 @@ export const get_day_id_api = (req: Request, res: Response) => {
  */
 export const post_meal_item_api = (req: Request, res: Response) => {
     let entry:food.Food = req.body;
+    entry.last_used = new Date().toISOString();
 
     let id:string = req.params.did;
     let type:"breakfast"|"lunch"|"dinner"|"snack"|"dessert" = req.params.type as "breakfast"|"lunch"|"dinner"|"snack"|"dessert";
@@ -119,6 +120,7 @@ export const post_meal_item_api = (req: Request, res: Response) => {
  */
 export const put_meal_item_api = (req: Request, res: Response) => {
     let entry:food.Food = req.body;
+    entry.last_used = new Date().toISOString();
 
     let id:string = req.params.did;
     let type:"breakfast"|"lunch"|"dinner"|"snack"|"dessert" = req.params.type as "breakfast"|"lunch"|"dinner"|"snack"|"dessert";

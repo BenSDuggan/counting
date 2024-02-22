@@ -7,7 +7,6 @@ import {
 
 import Menu  from './components/Navbar'
 import Day from './components/Day'
-import MealEdit from './components/MealEdit'
 import Food from './components/Food'
 import Products from './components/Products'
 import Weights from './components/Weights'
@@ -37,10 +36,6 @@ const router = createBrowserRouter([
   {
     path: "products",
     element: <Products></Products>
-  },
-  {
-    path: "mealedit",
-    element: <MealEdit></MealEdit>
   }
 ]);
 

@@ -8,6 +8,7 @@ import { settings } from './common/settings'
 
 import * as weight_api from './routes/weight_api'
 import * as food_api from './routes/food_api'
+import * as product_api from './routes/product_api'
 import * as meal_api from './routes/meal_api'
 import * as day_api from './routes/day_api'
 
@@ -39,11 +40,14 @@ app.put(API_BASE_URL+'/weight/', weight_api.put_weight_api);
 app.delete(API_BASE_URL+'/weight/:id', weight_api.delete_weight_api);
 
 // Food API
+app.get(API_BASE_URL+'/food/recent', food_api.get_food_recent_api);
 app.get(API_BASE_URL+'/food/:id/', food_api.get_food_id_api);
 app.get(API_BASE_URL+'/food/', food_api.get_food_api);
 app.post(API_BASE_URL+'/food/', food_api.post_food_api);
 app.put(API_BASE_URL+'/food/', food_api.put_food_api);
 app.delete(API_BASE_URL+'/food/:id', food_api.delete_food_api);
+
+app.get(API_BASE_URL+'/product/barcode/:id', product_api.get_product_barcode_id_api);
 
 // Day API
 app.get(API_BASE_URL+'/day/:id/', day_api.get_day_id_api);

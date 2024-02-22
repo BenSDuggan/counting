@@ -17,7 +17,6 @@ function Menu(props:any) {
           <Nav.Link href="/day">Day</Nav.Link>
           <Nav.Link href="/food">Food</Nav.Link>
           <Nav.Link href="/products">Products</Nav.Link>
-          <Nav.Link href="/mealedit">Meal Edit</Nav.Link>
           <Nav.Link href="/weights">Weights</Nav.Link>
           </Nav>
         </Navbar.Collapse>

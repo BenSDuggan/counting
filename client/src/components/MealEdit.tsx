@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Pagination from 'react-bootstrap/Pagination';
 
+import Recent from './Recent'
 import Food from './Food'
 import MealItems from './MealItems'
 import Products from './Products'
@@ -23,7 +24,7 @@ const MealEdit = () => {
     const [type, setType] = useState<"breakfast"|"lunch"|"dinner"|"snack"|"dessert">("breakfast");
     const [missing, setMissing] = useState(true);
 
-    const [tab, setTab] = useState("foods");
+    const [tab, setTab] = useState("recent");
 
     async function get_day(ignore:boolean) {
         const currentDate = new Date();
@@ -56,20 +57,6 @@ const MealEdit = () => {
         .catch((error) => console.error(error));
     }
 
-    let search_clicked = () => {
-        if(tab === 'recent') {
-
-        }
-        else if(tab === 'foods') {
-
-        }
-        else if(tab === 'products') {
-            //search_product();
-        }
-        else {
-            console.error("Cannot search, `tab` is not a valid option.")
-        }
-    }
 
     useEffect(() => {
         if(meal_types.includes(searchParams.get("type") as string)) {
@@ -103,6 +90,12 @@ const MealEdit = () => {
                     
                 </Row>
                 
+                {tab === 'recent' ? 
+                    <Recent
+                        did={day.did}
+                        type={type}
+                    ></Recent> : <></>}
+
                 {tab === 'products' ? 
                     <Products
                         did={day.did}

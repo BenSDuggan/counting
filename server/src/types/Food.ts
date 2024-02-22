@@ -63,12 +63,12 @@ export const new_food = ():Food => {
 *
 * Returns: JSON object with the matched terms
 */
-export const get_food = async (terms:{}, num_results:number=10, page:number=0):Promise<WithId<Food>[]> => {
+export const get_food = async (terms:{}, num_results:number=10, page:number=0, sort:string="timestamp"):Promise<WithId<Food>[]> => {
     const cursor = await client
     .db(DATABASE_NAME)
     .collection<Food>(collection)
     .find(terms)
-    .sort( { "timestamp":-1 } )
+    .sort( { sort:-1 } )
     .skip(num_results*page)
     .limit(num_results);
 
@@ -131,3 +131,12 @@ export const delete_food = async(id:string|string[]): Promise<boolean> => {
 }
 
 
+/* Update the `last_used` time for a Food to the current time
+*
+* id (string): The ID of the Food item to update
+*
+* Returns: true if successfully updated and false otherwise
+*/
+export const update_used_time = async(id:string): Promise<boolean> => {
+    return update_food(id, {"last_used":new Date().toISOString()});
+}

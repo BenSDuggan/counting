@@ -29,6 +29,21 @@ export const get_food_api = (req: Request, res: Response) => {
     });
 };
 
+/**
+ * Get many food records, but in order of how recent they were used. Further refine by giving dates and page number
+ * @route GET /api/food/recent
+ */
+export const get_food_recent_api = (req: Request, res: Response) => {
+    let page:number = Number(req.query.page) ?? 0;
+
+    food.get_food({}, NUMBER_RESULTS, page, "last_used").then((result) => {
+        res.status(200).json({"successful":true, "data":result});
+    }).catch((err) => {
+        logger.error("food_api: could not fetch food from database. " + err.message);
+        res.status(500).json({"successful":false, "data":err.message}).end();
+    });
+};
+
 
 /**
  * Get specific food record
@@ -102,3 +117,4 @@ export const delete_food_api = (req: Request, res: Response) => {
         res.status(500).json({"successful":false, "data":err.message}).end();
     });
 };
+

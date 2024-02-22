@@ -47,7 +47,9 @@ export const MealItemAdd = (props:IProps) => {
 
 
     return (
-            <Card key={props.food.fid+uuidv4()}>
+            <Card 
+                border={props.food.manual ? "success" : "warning"}
+                key={props.food.fid+uuidv4()}>
                 <Card.Body>
                     <Card.Title>{props.food.name}</Card.Title>
                     <Card.Subtitle>

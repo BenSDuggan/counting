@@ -26,7 +26,7 @@ const Products = (props:IProps) => {
     let search_product = async () => {
         let product_id:string = search;
 
-        fetch("https://world.openfoodfacts.org/api/v2/product/"+product_id+".json", {
+        fetch("/api/product/barcode/"+product_id, {
             method: 'get',
             headers: {'Content-Type': 'application/json'}
         })
@@ -35,21 +35,8 @@ const Products = (props:IProps) => {
         })
         .then((record) => {
             console.log(record);
-            if(record.status === 1) {
-                let food:Food_Type = new_food();
-
-                food.name = record["product"]["product_name"];
-                food.serving = record["product"]["serving_size"];
-                food.manual = false;
-                food.off_id = product_id;
-
-                food.calories = record["product"]["nutriments"]["energy-kcal"];
-                food.fat = record["product"]["nutriments"]["fat"];
-                food.carbs = record["product"]["nutriments"]["carbohydrates"];
-                food.protein = record["product"]["nutriments"]["proteins"];
-
-                console.log(food);
-                setSearchItems([food]);
+            if(record.successful) {
+                setSearchItems([record.data]);
             }
             else {
                 alert("Product does not exist.")
