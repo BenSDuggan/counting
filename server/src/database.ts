@@ -1,33 +1,26 @@
 
 import { 
-    MongoClient, 
-    type InsertOneResult, 
-    type InsertManyResult, 
-    type UpdateResult,
-    type DeleteResult, 
-    type Filter,
-    type WithId,
-    Document
+    MongoClient
 } from "mongodb"
 
 import { logger } from "./common/logger"
-import { settings } from "./common/settings"
+import { config } from "./config"
 
 
-export const DATABASE_NAME:string = settings.db.name ?? "counting";
+export const DATABASE_NAME:string = config.db.name ?? "counting";
 
 let uri:string = "";
 
-if(settings.db.user === undefined) {
+if(config.db.user === undefined) {
     uri = "mongodb://localhost:27017/?maxPoolSize=20&w=majority";
 }
 else {
     uri = 'mongodb://' + 
-    settings.db.user + ':' +
-    settings.db.pass + '@' + 
-    settings.db.host + ':' + 
-    settings.db.port + '/' + 
-    settings.db.name + '?maxPoolSize=20&w=majority';
+    config.db.user + ':' +
+    config.db.pass + '@' + 
+    config.db.host + ':' + 
+    config.db.port + '/' + 
+    config.db.name + '?maxPoolSize=20&w=majority';
 }
 
 export const client:MongoClient = new MongoClient(uri); // Create a new MongoClient

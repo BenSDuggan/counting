@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  counting:
+    container_name: counting
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    environment:
+      - prod=true
+    expose:
+      - '4010'
+    ports:
+      - '4000:4010'
+      - '27017:27017'
+    command: npm run start

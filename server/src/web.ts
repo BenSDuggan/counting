@@ -1,10 +1,11 @@
 
+import path from 'path';
 
 import bodyParser from 'body-parser'
 import express, { Application, Request, Response } from 'express';
 
 import { logger } from './common/logger'
-import { settings } from './common/settings'
+import { config } from './config'
 
 import * as weight_api from './routes/weight_api'
 import * as food_api from './routes/food_api'
@@ -14,12 +15,12 @@ import * as day_api from './routes/day_api'
 
 export const app:Application = express();
 
-const PORT:number = settings.port ?? 4000;
-
+const PORT:number = Number(config.port);
 const API_BASE_URL:string = '/api';
+const FRONTEND_URL:string = path.join(__dirname,"../../client/build");
 
-
-//app.use('/audio', express.static('../data'))
+//app.use('/', express.static('../client/build'))
+app.use(express.static(FRONTEND_URL));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -27,8 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Get server version
 app.get(API_BASE_URL+'/version', (req: Request, res: Response): void => {
-    //res.send('Hello world!');
-    res.status(200).json({"version":"v0.0.1a"})
+    res.status(200).json({"version":"v0.0.1b"})
 });
 
 
@@ -60,6 +60,11 @@ app.delete(API_BASE_URL+'/day/:id', day_api.delete_day_api);
 app.post(API_BASE_URL+'/meal/:did/:type/', meal_api.post_meal_item_api);
 app.put(API_BASE_URL+'/meal/:did/:type/', meal_api.put_meal_item_api);
 app.delete(API_BASE_URL+'/meal/:did/:type/:fid', meal_api.delete_meal_item_api);
+
+// Handle any other routes by serving the index.html file
+app.get('*', (req, res) => {
+    res.sendFile(path.join(FRONTEND_URL, "index.html"));
+});
 
 app.listen(PORT, (): void => {
     logger.info('Server started on port: ' + PORT);
