@@ -13,8 +13,8 @@ interface config_type {
 }
 
 export const config:config_type = {
-    "prod":process.env.prod == "true" ?? false,
-    "port":process.env.port ?? "4010",
+    "prod":process.env.COUNTING_PROD == "true" ?? false,
+    "port":process.env.COUNTING_PORT ?? "4000",
     "db":{
         "host":process.env.DB_HOST ?? "localhost",
         "port":"27017",

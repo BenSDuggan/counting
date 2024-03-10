@@ -11,7 +11,7 @@ export const DATABASE_NAME:string = config.db.name ?? "counting";
 
 let uri:string = "";
 
-if(config.db.user === undefined) {
+if(config.db.user === "" && !config.prod) {
     uri = "mongodb://localhost:27017/?maxPoolSize=20&w=majority";
 }
 else {

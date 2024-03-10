@@ -8,10 +8,10 @@ services:
       dockerfile: Dockerfile
       target: base
     environment:
-      - prod=true
+      - prod=false
     expose:
-      - '4010'
+      - '4000'
     ports:
-      - '4000:4010'
+      - '4010:4000'
       - '27017:27017'
     command: npm run start

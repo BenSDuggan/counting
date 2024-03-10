@@ -63,7 +63,8 @@ app.delete(API_BASE_URL+'/meal/:did/:type/:fid', meal_api.delete_meal_item_api);
 
 // Handle any other routes by serving the index.html file
 app.get('*', (req, res) => {
-    res.sendFile(path.join(FRONTEND_URL, "index.html"));
+    if(config.prod)
+        res.sendFile(path.join(FRONTEND_URL, "index.html"));
 });
 
 app.listen(PORT, (): void => {
