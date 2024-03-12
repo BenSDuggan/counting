@@ -1,4 +1,4 @@
-FROM node:18.18.0-alpine as base
+FROM node:20-alpine3.18 as base
 
 # Build Client
 RUN mkdir -p /home/node/app/client && chown -R node:node /home/node/app/client
