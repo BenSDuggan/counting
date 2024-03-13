@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Get server version
 app.get(API_BASE_URL+'/version', (req: Request, res: Response): void => {
-    res.status(200).json({"version":"v0.0.1b"})
+    res.status(200).json({"version":"v0.0.1b","timestamp":new Date().toISOString()})
 });
 
 
