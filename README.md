@@ -52,10 +52,12 @@ export DB_PASS=<DATABASE_PASSWORD>
 - [ ] Deploy
     - [x] Create working docker image
     - [ ] Create script to build nightly
+    - [ ] Create systemd
 
 ## Bugs
 
 - [ ] `food_api.get_food_api` and `food_api.get_food_recent_api` both return the previous item when `page >= 2`
+- [x] When foods are added, the modified card shows NaN for all values. Not adding default quantity? **Solution:** `FoodNewModal` was manually setting state from `props` instead of setting the default state using `new_food()` and updating values from the `props` in `useEffect`
 
 ## Docker
 

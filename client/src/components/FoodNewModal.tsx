@@ -1,5 +1,5 @@
 
-import { useState} from "react";
+import { useState, useEffect } from "react";
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -7,20 +7,11 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 
+import { type Food as Food_Type, new_food } from '../types/Food';
+
 
 const FoodNewModal = (props:any) => {
-    const [foods, setFoods] = useState({
-        "fid":props.food.fid ?? uuidv4(), 
-        "name":props.food.name ?? "",
-        "description":props.food.description ?? "",
-        "serving":props.food.serving ?? "",
-        "calories":props.food.number ?? 0,
-        "carbs":props.food.carbs ?? 0,
-        "fat":props.food.fat ?? 0,
-        "protein":props.food.protein ?? 0,
-        "photos":props.food.photos ?? [],
-        "timestamp": props.food.timestamp ?? new Date().toISOString()
-    });
+    const [foods, setFoods] = useState<Food_Type>(new_food());
     const [show, setShow] = useState(false);
 
     const NEW_FOOD = !props.food.hasOwnProperty("fid");
@@ -57,6 +48,22 @@ const FoodNewModal = (props:any) => {
             alert(error);
         });
     }
+
+    useEffect(() => {
+        setFoods({
+            ...foods,
+            "fid":props.food.fid ?? uuidv4(), 
+            "name":props.food.name ?? "",
+            "description":props.food.description ?? "",
+            "serving":props.food.serving ?? "",
+            "calories":props.food.number ?? 0,
+            "carbs":props.food.carbs ?? 0,
+            "fat":props.food.fat ?? 0,
+            "protein":props.food.protein ?? 0,
+            "photos":props.food.photos ?? [],
+            "timestamp": props.food.timestamp ?? new Date().toISOString()
+        });
+    }, []);
 
     return (
         <>
